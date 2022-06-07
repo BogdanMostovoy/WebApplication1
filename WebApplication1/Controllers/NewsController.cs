@@ -48,6 +48,7 @@ namespace WebApplication1.Controllers
             var date = DateTime.Now;
             news.Date_create = date;
             news.Date_update = date;
+
             return RedirectToAction(nameof(newsList));
         }
     }
