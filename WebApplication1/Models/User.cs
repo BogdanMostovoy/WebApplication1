@@ -10,7 +10,6 @@ namespace WebApplication1.Models
         int Id { get; set; }
         string Name { get; set; }
         private string pass { get; set; }
-
         bool is_admin { get; set; }
     }
 }
