@@ -6,19 +6,22 @@
     <title>@ViewData["Title"] Чугуевская центральная библиотека</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        
-        <a href="" class="navbar-brand"><img src="img/favicon.jpg" width="40" height="40" class="d-inline-block align-text-top"/>Чугуевская центральная библиотека</a>
+    <div class="container-fluid d-flex justify-content-between">
+        <div>
+            <a href="" class="navbar-brand"><img src="img/favicon.jpg" width="40" height="40" class="d-inline-block align-text-top"/>Чугуевская центральная библиотека</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-Content"
                 aria-controls="navbarContent" aria-expanded="False">
             <span class="navbar-toggler-icon"></span>
         </button>
+        </div>
         
-        <div class="collapse navbar-collapse" id="navbarContent">
+        
+        <div>
                 <ul class="navbar-nav mr-auto mb-2">
                     <li class="nav-item">
                         <a href="" class="nav-link">Главная</a>
@@ -26,38 +29,75 @@
                     <li class="nav-item">
                         <a href="" class="nav-link">Общая информация</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link">Отдел обсуживания</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link">Детско-юношеский отдел</a>
-                    </li>
+
+                     <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Отдел обсуживания
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">Главная</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Анонсы</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Мероприятия</a></li>
+           
+                      </ul>
+                      </li>
+                   
+                      <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Детско-юношеский отдел
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">Главная</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Анонсы</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Мероприятия</a></li>
+           
+                      </ul>
+                      </li>
                 </ul>
+           
+        </div>
+        <div class="row">
             <form action="" class="d-flex">
                 <input type="search" placeholder="Поиск" class="form-control mr-2"/>
                 <button class="btn btn-outline-success">Поиск</button>
-            </form>
-        </div>
+             </form>
+          <a href="#" class="btn btn-light"><i class="bi bi-key"></i></a>  
+
+         </div>
+        
     </div>
 </nav>
 
 
-
-
-        
-<div class="container">
+    <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+
+
+
+
+
+
+
     </div>
+  
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; Чугуевская центральная библиотека - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <div class="container-fluid">
+            
+      <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+       <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
+      </a>
+        <span class="text-muted">&copy; 2021 Company, Inc</span>
+    </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
