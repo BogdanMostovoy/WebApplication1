@@ -6,5 +6,6 @@ namespace WebApplication1.Database.Repository
     public interface INewsRepository
     {
         ICollection<News> GetNews();
+        News GetPost(int NewsId);
     }
 }
