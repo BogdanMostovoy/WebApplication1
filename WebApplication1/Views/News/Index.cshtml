@@ -1,26 +1,11 @@
-﻿@model WebApplication1.Models.AllModels
+﻿
+@model ICollection<News>
 
 @{
     ViewData["Title"] = "Наши новости";
 }
 
-@{
-    if (Model.newsList != null && Model.newsList.Count > 0)
-        foreach (var item in Model.newsList)
-        {
-    <tr>
 
-                <td>@item.NewsId</td>
-                <td>@item.Title</td>
-                <td>@item.Description</td>
-                <td>@item.Date_create</td>
-                <td>@item.Date_update</td>
-
-    </tr>
-     
- }
-
- }
 <h1>@ViewData["Title"]</h1>
 
 <div>
@@ -44,16 +29,18 @@
     </div>
 
     <div class="col-6 pe-1">
-    <h3>Наши переодические издания:</h3>
-            <li><span>Родина</span></li> 
-            <li><span>Наша кухня</span></li> 
+        <h3>Наши переодические издания:</h3>
+        <ul>
+            <li><span>Родина</span></li>
+            <li><span>Наша кухня</span></li>
             <li><span>Приусадебный</span></li>
             <li><span>100 советов дачнику</span></li>
             <li><span>Приусадебное хозяйство</span></li>
             <li><span>Домашний очаг</span></li>
             <li><span>Вокруг света</span></li>
             <li><span>Бурда</span></li>
-
+        </ul>
+           
     </div>
 </div>
 
@@ -80,7 +67,7 @@
 
             <div class="col-auto d-none d-lg-block">
 
-                <img class="bd-placeholder-img" width="200" height="250" src="/img/news-img/1.jpg" role="img"  preserveAspectRatio="xMidYMid slice" focusable="false"></img>
+                < class="bd-placeholder-img" width="200" height="250" src="/img/news-img/1.jpg" role="img"  preserveAspectRatio="xMidYMid slice" focusable="false"></>
 
             </div>
 

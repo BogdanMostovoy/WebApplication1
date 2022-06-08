@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
+using WebApplication1.Database.Repository;
 using WebApplication1.Models;
 using WebApplication1.Services;
 
@@ -12,20 +14,22 @@ namespace WebApplication1.Controllers
     public class NewsController : Controller
     {
         private readonly INewsService _newsService;
-        public NewsController(INewsService newsService)
+        private readonly INewsRepository _newsRepository;
+        public NewsController(INewsService newsService, INewsRepository newsRepository)
         {
             _newsService = newsService;
+            _newsRepository = newsRepository;
         }
 
 
         [HttpGet]
         public IActionResult newsList()
         {
-           AllModels model = new AllModels();
-            
 
-            model.newsList = _newsService.GetNewsRecord().ToList();
-            return View("NewsList" ,model);
+            var news = _newsRepository.GetNews();
+          // AllModels model = new AllModels();
+          // model.newsList = _newsService.GetNewsRecord().ToList();
+            return View("NewsList",news);
         }
 
 
