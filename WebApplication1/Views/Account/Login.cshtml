@@ -1,0 +1,31 @@
+﻿@model LoginModel
+<html>
+
+<body class="text-center">
+        <img class="mb-4" src="/img/favicon.jpg" alt="" width="72" height="57">
+        <h1 class="h3 mb-3 fw-normal">Войдите в учётную запись</h1>
+<main class="form-signin">
+    <form asp-action="Login" asp-controller="Account" asp-anti-forgery = "true">
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+
+        <div class="form-floating">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" asp-for ="login">
+            <label asp-for="login" for="floatingInput">Логин</label>
+            <span asp-validation-for="login"/>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password" asp-for="Password">
+            <label asp-for="Password" for="floatingPassword">Пароль</label>
+            <span asp-validation-for="Password"/>
+        </div>
+
+        <button  class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
+        <button asp-action="Register" class="w-100 btn btn-lg btn-primary" type="submit">Регистрация</button>
+        <p class="mt-5 mb-3 text-muted">&copy; Чугуевская центральная библиотека</p>
+    </form>
+</main>
+<script src="/docs/5.1/dist/js/bootstrap.bundle.min.js?v=513" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>
+
+    

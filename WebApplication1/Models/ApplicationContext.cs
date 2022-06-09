@@ -23,7 +23,7 @@ public class ApplicationContext : DbContext
 
         Role adminRole = new Role{Id = 1, Name = adminRoleName};
         Role userRole = new Role{Id = 2, Name = userRoleName};
-        User adminUser = new User {Id = 1, Login = adminLogin, Password = adminPass, RoleId = adminRole.Id};
+        User adminUser = new User {Id = 1, login = adminLogin, Password = adminPass, RoleId = adminRole.Id};
 
 
         modelBuilder.Entity<Role>().HasData(new Role[]{adminRole, userRole});
