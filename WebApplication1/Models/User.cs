@@ -7,9 +7,23 @@ namespace WebApplication1.Models
 {
     public class User
     {
-        int Id { get; set; }
-        string Name { get; set; }
-        private string pass { get; set; }
-        bool is_admin { get; set; }
+        public int Id { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
+        public int? RoleId { get; set; }
+        public Role Role { get; set; }
+    }
+
+    public class Role
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public List<User> Users { get; set; }
+
+        public Role()
+        {
+            Users = new List<User>();
+        }
+
     }
 }
