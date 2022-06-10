@@ -34,6 +34,9 @@ namespace WebApplication1.Database.Repository
                         news.NewsId = Convert.ToInt32(rdr["NewsId"]);
                         news.Title = rdr["Title"].ToString();
                         news.Description = rdr["Description"].ToString();
+                        news.Date_create = Convert.ToDateTime(rdr["Date_create"].ToString());
+                        news.Date_update = Convert.ToDateTime(rdr["Date_update"].ToString());
+                        news.ImagePath = rdr["ImagePath"].ToString();
 
 
                         newsList.Add(news);

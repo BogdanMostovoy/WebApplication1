@@ -37,26 +37,21 @@ namespace WebApplication1.Services
                         news.NewsId = Convert.ToInt32(rdr["NewsId"]);
                         news.Title = rdr["Title"].ToString(); 
                         news.Description = rdr["Description"].ToString();
+                        news.Date_create = Convert.ToDateTime(rdr["Date_create"].ToString());
+                        news.Date_update = Convert.ToDateTime(rdr["Date_update"].ToString());
+                        news.ImagePath = rdr["ImagePath"].ToString();
 
-
-                       newsList.Add(news);
+                        newsList.Add(news);
                     }
                 }
                 return newsList.ToList();
-
             }
             catch (Exception)
             {
-
-
                 throw;
             }
         }
-
-
-
     }
-
     public interface INewsService
     {
         public List<News> GetNewsRecord();

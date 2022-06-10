@@ -41,6 +41,8 @@ namespace WebApplication1
             services.AddControllersWithViews();
             services.AddSingleton<INewsService, NewsServices>();
             services.AddScoped<INewsRepository, NewsRepository>();
+            services.AddSingleton<, PreviewServices>();
+            services.AddScoped<IPreviewRepository, PreviewRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

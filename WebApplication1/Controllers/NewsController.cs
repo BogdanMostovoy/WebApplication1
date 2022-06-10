@@ -48,10 +48,13 @@ namespace WebApplication1.Controllers
 
        [HttpPost] 
        public IActionResult Create(News news)
-        {
+       {
+            news.Title = ToString();
+            news.Description = ToString();
             var date = DateTime.Now;
             news.Date_create = date;
             news.Date_update = date;
+            news.ImagePath = ToString();
 
             return RedirectToAction(nameof(newsList));
         }

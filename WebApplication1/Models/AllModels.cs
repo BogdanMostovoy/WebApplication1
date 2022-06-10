@@ -10,9 +10,9 @@ namespace WebApplication1.Models
     {
         public List<News> newsList { get; set; }
 
-        
+        public List<Preview> previewList { get; set; }
 
-      
+
 
     }
 }
