@@ -41,7 +41,7 @@ namespace WebApplication1
             services.AddControllersWithViews();
             services.AddSingleton<INewsService, NewsServices>();
             services.AddScoped<INewsRepository, NewsRepository>();
-            services.AddSingleton<, PreviewServices>();
+            
             services.AddScoped<IPreviewRepository, PreviewRepository>();
         }
 

@@ -6,60 +6,61 @@ using Microsoft.Extensions.Configuration;
 using WebApplication1.Database.Repository;
 using WebApplication1.Models;
 
-namespace WebApplication1.Services;
-
-public class PreviewServices : IPreviewServices
+namespace WebApplication1.Services
 {
-    public string Constr { get; set; }
-    public IConfiguration _configuration;
-    public SqlConnection connection;
-
-    public PreviewServices(IConfiguration configuration)
+    public class PreviewServices : IPreviewServices
     {
-        _configuration = configuration;
-        Constr = _configuration.GetConnectionString("DBConnection");
-    }
+        public string Constr { get; set; }
+        public IConfiguration _configuration;
+        public SqlConnection connection;
 
-    public List<Preview> GetPreviewRecords()
-    {
-        List<Preview> previewList = new List<Preview>();
-        try
+        public PreviewServices(IConfiguration configuration)
         {
-            using (connection = new SqlConnection(Constr))
+            _configuration = configuration;
+            Constr = _configuration.GetConnectionString("DBConnection");
+        }
+
+        public List<Preview> GetPreviewRecords()
+        {
+            List<Preview> previewList = new List<Preview>();
+            try
             {
-                connection.Open();
-                var cmd = new SqlCommand("SP_GetPreviewRecords", connection);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                SqlDataReader rdr = cmd.ExecuteReader();
-
-                while (rdr.Read())
+                using (connection = new SqlConnection(Constr))
                 {
-                    Preview preview = new Preview();
-                    preview.ID = Convert.ToInt32(rdr["ID"]);
-                    preview.Title = rdr["Title"].ToString();
-                    preview.Description = rdr["Description"].ToString();
-                    preview.Date_create = Convert.ToDateTime(rdr["Date_create"].ToString());
-                    preview.ImagePath = rdr["ImagePath"].ToString();
+                    connection.Open();
+                    var cmd = new SqlCommand("SP_GetPreviewRecords", connection);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    SqlDataReader rdr = cmd.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        Preview preview = new Preview();
+                        preview.ID = Convert.ToInt32(rdr["ID"]);
+                        preview.Title = rdr["Title"].ToString();
+                        preview.Description = rdr["Description"].ToString();
+                        preview.Date_create = Convert.ToDateTime(rdr["Date_create"].ToString());
+                        preview.ImagePath = rdr["ImagePath"].ToString();
 
 
-                    previewList.Add(preview);
+                        previewList.Add(preview);
+                    }
                 }
+
+                return previewList.ToList();
+
             }
-
-            return previewList.ToList();
-
+            catch (Exception)
+            {
+                throw;
+            }
         }
-        catch (Exception)
+
+
+
+        public interface I
         {
-            throw;
+            public List<Preview> GetPreviewRecords();
         }
-    }
-
-
-
-    public interface IPre
-    {
-        public List<Preview> GetPreviewRecords();
     }
 }
     

@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Database.Repository;
 using WebApplication1.Models;
 
@@ -8,12 +8,12 @@ namespace WebApplication1.Controllers
 {
     public class PreviewController : Controller
     {
-        private readonly IPreviewService _previewService;
+        private readonly IPreviewServices _previewServices;
         private readonly IPreviewRepository _previewRepository;
         
 
 
-        public PreviewController(IPreviewRepository previewRepository, IPreviewService previewServices)
+        public PreviewController(IPreviewRepository previewRepository,IPreviewService previewServices)
         {
             _previewRepository = previewRepository;
             _previewService = previewServices;

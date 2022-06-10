@@ -7,11 +7,9 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Database.Repository
 {
-    public class PreviewRepository : IPreviewRepository
+    internal class PreviewRepository : IPreviewRepository
     {
-
         private readonly IConfiguration _configuration;
-
         public PreviewRepository(IConfiguration configuration)
         {
             _configuration = configuration;

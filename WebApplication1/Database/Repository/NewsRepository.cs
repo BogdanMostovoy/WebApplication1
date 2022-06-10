@@ -49,9 +49,6 @@ namespace WebApplication1.Database.Repository
             {
                 throw;
             }
-
-            
-            
         }
 
         public News GetPost(int NewsId)
