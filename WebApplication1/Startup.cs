@@ -30,7 +30,7 @@ namespace WebApplication1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer("DbConnection"));
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer("BaseConnect"));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
@@ -41,7 +41,7 @@ namespace WebApplication1
             services.AddControllersWithViews();
             services.AddSingleton<INewsService, NewsServices>();
             services.AddScoped<INewsRepository, NewsRepository>();
-            
+            services.AddSingleton<IPreviewServices, PreviewServices>();
             services.AddScoped<IPreviewRepository, PreviewRepository>();
         }
 

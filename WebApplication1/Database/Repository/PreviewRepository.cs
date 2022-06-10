@@ -17,7 +17,7 @@ namespace WebApplication1.Database.Repository
 
         public ICollection<Preview> GetPreviews()
         {
-            var conString = _configuration.GetConnectionString("DBConnection");
+            var conString = _configuration.GetConnectionString("BaseConnect");
             List<Preview> previewsList = new List<Preview>();
             try
             {

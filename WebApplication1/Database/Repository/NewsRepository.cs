@@ -17,7 +17,7 @@ namespace WebApplication1.Database.Repository
         }
         public ICollection<News> GetNews()
         {
-            var conString = _configuration.GetConnectionString("DBConnection");
+            var conString = _configuration.GetConnectionString("BaseConnect");
             List<News> newsList = new List<News>();
             try
             {

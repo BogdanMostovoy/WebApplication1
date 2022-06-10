@@ -16,7 +16,7 @@ namespace WebApplication1.Services
         public NewsServices(IConfiguration configuration)
         {
             _configuration = configuration;
-            Constr = _configuration.GetConnectionString("DBConnection");
+            Constr = _configuration.GetConnectionString("BaseConnect");
         }
 
         public List<News> GetNewsRecord()

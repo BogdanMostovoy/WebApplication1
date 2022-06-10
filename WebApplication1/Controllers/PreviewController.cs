@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Database.Repository;
 using WebApplication1.Models;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
@@ -13,10 +14,10 @@ namespace WebApplication1.Controllers
         
 
 
-        public PreviewController(IPreviewRepository previewRepository,IPreviewService previewServices)
+        public PreviewController(IPreviewRepository previewRepository,IPreviewServices previewServices)
         {
             _previewRepository = previewRepository;
-            _previewService = previewServices;
+            _previewServices = previewServices;
         }
 
         public IActionResult previewList()

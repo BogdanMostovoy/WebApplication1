@@ -17,7 +17,7 @@ namespace WebApplication1.Services
         public PreviewServices(IConfiguration configuration)
         {
             _configuration = configuration;
-            Constr = _configuration.GetConnectionString("DBConnection");
+            Constr = _configuration.GetConnectionString("BaseConnect");
         }
 
         public List<Preview> GetPreviewRecords()
@@ -54,16 +54,12 @@ namespace WebApplication1.Services
                 throw;
             }
         }
-
-
-
-        public interface I
-        {
-            public List<Preview> GetPreviewRecords();
-        }
+    }
+    public interface IPreviewServices
+    {
+        public List<Preview> GetPreviewRecords();
     }
 }
-    
 
 
 
