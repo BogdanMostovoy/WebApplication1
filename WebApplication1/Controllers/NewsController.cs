@@ -27,9 +27,9 @@ namespace WebApplication1.Controllers
         {
 
             var news = _newsRepository.GetNews();
-          // AllModels model = new AllModels();
-          // model.newsList = _newsService.GetNewsRecord().ToList();
-            return View("NewsList",news);
+           AllModels model = new AllModels();
+           model.newsList = _newsService.GetNewsRecord().ToList();
+            return View("Index", news);
         }
 
 
