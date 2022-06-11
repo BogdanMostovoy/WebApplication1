@@ -1,33 +1,24 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using WebApplication1.Database.Repository;
-using WebApplication1.Models;
-using WebApplication1.Services;
+using Web.Database;
+using Web.Services;
 
-namespace WebApplication1
+namespace Web
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
-
-
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer("BaseConnect"));
@@ -39,13 +30,10 @@ namespace WebApplication1
                 });
             
             services.AddControllersWithViews();
-            services.AddSingleton<INewsService, NewsServices>();
-            services.AddScoped<INewsRepository, NewsRepository>();
-            services.AddSingleton<IPreviewServices, PreviewServices>();
-            services.AddScoped<IPreviewRepository, PreviewRepository>();
+            services.AddScoped<INewsService, NewsService>();
+            services.AddScoped<IAnnouncesService, AnnouncesService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -55,7 +43,6 @@ namespace WebApplication1
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection();

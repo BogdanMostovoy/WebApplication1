@@ -1,4 +1,4 @@
-﻿@model RegisterModel
+﻿@model Web.ViewModels.Auth.RegisterModel
 
 
 <html><body class="text-center">
@@ -10,9 +10,9 @@
         <div class="has-validation" asp-validation-summary="ModelOnly"></div>
 
             <div class="form-floating">
-                <label asp-for="login" for="floatingInput">Логин</label> 
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" asp-for ="login">
-                <span asp-validation-for="login"/>
+                <label asp-for="Login" for="floatingInput">Логин</label> 
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" asp-for ="Login">
+                <span asp-validation-for="Login"/>
                
             </div>
             <div class="form-floating">                

@@ -1,62 +1,49 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
-using WebApplication1.Database.Repository;
-using WebApplication1.Models;
-using WebApplication1.Services;
+using Microsoft.AspNetCore.Mvc;
+using Web.Models;
+using Web.Services;
 
-namespace WebApplication1.Controllers
+namespace Web.Controllers;
+
+public class NewsController : Controller
 {
-    public class NewsController : Controller
+    private readonly INewsService _newsService;
+
+    public NewsController(INewsService newsService)
     {
-        private readonly INewsService _newsService;
-        private readonly INewsRepository _newsRepository;
-        public NewsController(INewsService newsService, INewsRepository newsRepository)
-        {
-            _newsService = newsService;
-            _newsRepository = newsRepository;
-        }
+        _newsService = newsService;
+    }
 
 
-        [HttpGet]
-        public IActionResult newsList()
-        {
-
-            var news = _newsRepository.GetNews();
-           AllModels model = new AllModels();
-           model.newsList = _newsService.GetNewsRecord().ToList();
-            return View("Index", news);
-        }
+    [HttpGet]
+    public async Task<IActionResult> NewsList() => View(await _newsService.LightNews());
 
 
-        public IActionResult Create()
-        {
-            var news = new News();
-            return View(news);
-        }
 
-        public IActionResult FullNews(int id)
-        {
-            var news = new News();
-            return View(news);
-        }
+    public IActionResult DetailedNews(int id)
+    {
+        var news = new News();
+        return View(news);
+    }
 
 
-       [HttpPost] 
-       public IActionResult Create(News news)
-       {
-            news.Title = ToString();
-            news.Description = ToString();
-            var date = DateTime.Now;
-            news.DateOfCreate = date;
-            news.DateOfUpdate = date;
-            news.ImagePath = ToString();
+    [HttpGet]
+    public IActionResult CreateNews()
+    {
+        var news = new News();
+        return View(news);
+    }
+    [HttpPost] 
+    public IActionResult CreateNews(News news)
+    {
+        news.Title = ToString();
+        news.Description = ToString();
+        var date = DateTime.Now;
+        news.DateTimeOfCreate = date;
+        news.DateTimeOfUpdate = date;
+        news.ImagePath = ToString();
 
-            return RedirectToAction(nameof(newsList));
-        }
+        return RedirectToAction(nameof(NewsList));
     }
 }
