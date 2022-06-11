@@ -52,8 +52,8 @@ namespace WebApplication1.Controllers
             news.Title = ToString();
             news.Description = ToString();
             var date = DateTime.Now;
-            news.Date_create = date;
-            news.Date_update = date;
+            news.DateOfCreate = date;
+            news.DateOfUpdate = date;
             news.ImagePath = ToString();
 
             return RedirectToAction(nameof(newsList));

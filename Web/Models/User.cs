@@ -24,6 +24,5 @@ namespace WebApplication1.Models
         {
             Users = new List<User>();
         }
-
     }
 }
