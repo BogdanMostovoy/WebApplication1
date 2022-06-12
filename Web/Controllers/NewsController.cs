@@ -32,10 +32,14 @@ public class NewsController : ChugBiblController
         return View(lightNews.Value);
     }
 
-    public IActionResult DetailedNews(int newsId)
+    [HttpGet]
+    public async Task<IActionResult> Detailed(int newsId)
     {
-        var news = new News();
-        return View(news);
+        var news = await _newsService.DetailedNews(newsId);
+        if (news.IsFailure)
+            ViewBag.ErrorMessage = news.ErrorMessage;
+        
+        return View(news.Value);
     }
 
     [HttpGet]

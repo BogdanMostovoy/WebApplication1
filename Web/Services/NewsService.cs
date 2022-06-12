@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Web.Database;
@@ -29,11 +30,12 @@ public class NewsService : INewsService
         var lightNews = new List<LightNews>();
         foreach (var item in news)
         {
-            var newsImage = await _imageService.GetFirstNewsImage(item.Id);
+            var newsImage = await _imageService.ReadFirstNewsImage(item.Id);
             if (newsImage.IsFailure)
                 return new(newsImage.ErrorMessage);
             lightNews.Add(new LightNews
             {
+                Id = item.Id,
                 Title = item.Title,
                 MainImage = newsImage.Value,
                 PostDate = item.DateTimeOfCreate
@@ -43,9 +45,26 @@ public class NewsService : INewsService
         return lightNews;
     }
 
-    public Task<Result<DetailedNews>> DetailedNews(int announceId)
+    public async Task<Result<DetailedNews>> DetailedNews(int newsId)
     {
-        throw new System.NotImplementedException();
+        var news = await _db.News.AsNoTracking()
+            .Include(u => u.Pictures)
+            .FirstOrDefaultAsync(u => u.Id == newsId);
+        
+        if (news == null)
+            return new($"Новость {newsId} не найдена");
+
+        var images = await _imageService.ReadImages(news.Pictures.Select(u => u.Id).ToList());
+        if (images.IsFailure)
+            return new(images.ErrorMessage);
+
+        return new DetailedNews
+        {
+            Title = news.Title,
+            Description = news.Description,
+            PostDate = news.DateTimeOfCreate,
+            Images = images.Value
+        };
     }
 
     public async Task<Result<int>> Create(int actorId, CreateNewsForm form)

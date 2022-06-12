@@ -31,7 +31,7 @@ public class ImageService : IImageService
         _pathToImages = Path.Combine(_environment.WebRootPath, "Uploads");
     }
 
-    public async Task<Result<byte[]>> GetFirstNewsImage(int newsId)
+    public async Task<Result<byte[]>> ReadFirstNewsImage(int newsId)
     {
         var firstImageName = await _db.NewsImages
             .Where(u => u.NewsId == newsId)
@@ -53,6 +53,36 @@ public class ImageService : IImageService
         }
 
         return image;
+    }
+
+    public async Task<Result<List<byte[]>>> ReadImages(List<int> imageIds)
+    {
+        var imageNames = await _db.NewsImages
+            .Where(u => imageIds.Contains(u.Id))
+            .OrderBy(u => u.Id)
+            .Select(u => u.Name)
+            .ToListAsync();
+        
+        var images = new List<byte[]>();
+        
+        foreach (var name in imageNames)
+        {
+            var path = Path.Combine(_pathToImages, name);
+            try
+            {
+                images.Add(await File.ReadAllBytesAsync(path));
+            }
+            catch (Exception)
+            {
+                return new($"Нельзя прочитать файл {name}");
+            }
+            
+        }
+
+        if (images.Count != imageIds.Count)
+            return new($"Не удалось найти все фото({string.Join(",", imageIds.Select(u => u.ToString()))})");
+        
+        return images;
     }
 
     public async Task<string> SaveFile(IFormFile file)
