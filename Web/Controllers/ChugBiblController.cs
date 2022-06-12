@@ -7,7 +7,7 @@ namespace Web.Controllers;
 
 public class ChugBiblController : Controller
 {
-    public int CurrentUserId
+    public int? CurrentUserId
     {
         get
         {
@@ -15,12 +15,26 @@ public class ChugBiblController : Controller
             
             //more info about context to message
             if (idClaim == null)
-                throw new Exception("Can't find id claim for user");
+                return null;
 
             if (!int.TryParse(idClaim.Value, out var id))
-                throw new Exception($"Can't parse user id {idClaim.Value}");
+                return null;
 
             return id;
+        }
+    }
+    
+    public string CurrentUserRoleCode
+    {
+        get
+        {
+            var roleClaim = User.Claims.FirstOrDefault(u => u.Type == ClaimsIdentity.DefaultRoleClaimType);
+            
+            //more info about context to message
+            if (roleClaim == null)
+                return null;
+
+            return roleClaim.Value;
         }
     }
 }

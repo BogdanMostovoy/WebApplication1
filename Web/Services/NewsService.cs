@@ -60,6 +60,7 @@ public class NewsService : INewsService
 
         return new DetailedNews
         {
+            Id = news.Id,
             Title = news.Title,
             Description = news.Description,
             PostDate = news.DateTimeOfCreate,
@@ -103,5 +104,19 @@ public class NewsService : INewsService
         await _db.SaveChangesAsync();
 
         return news.Id;
+    }
+
+    public async Task<Result<bool>> Delete(int newsId)
+    {
+        var news = await _db.News.Include(u => u.Pictures)
+            .FirstOrDefaultAsync(u => u.Id == newsId);
+        if (news == null)
+            return new($"Не удалось найти новость {newsId}");
+
+        _db.NewsImages.RemoveRange(news.Pictures);
+        _db.News.Remove(news);
+        await _db.SaveChangesAsync();
+
+        return true;
     }
 }

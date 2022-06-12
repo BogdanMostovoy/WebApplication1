@@ -57,7 +57,7 @@ public class NewsController : ChugBiblController
         if (!ModelState.IsValid)
             return View(createForm);
         
-        var creation = await _newsService.Create(CurrentUserId, createForm);
+        var creation = await _newsService.Create(CurrentUserId.Value, createForm);
         if (creation.IsFailure)
         {
             ModelState.AddModelError(string.Empty, creation.ErrorMessage);
@@ -65,5 +65,15 @@ public class NewsController : ChugBiblController
         }
 
         return RedirectToAction(nameof(List));
+    }
+
+    [HttpPost]
+    [Authorize(Roles = RoleCodes.Admin)]
+    public async Task<IActionResult> Delete(int newsId)
+    {
+        //TODO: should be log if error
+        var delete = await _newsService.Delete(newsId);
+
+        return RedirectToAction("List", "News");
     }
 }
