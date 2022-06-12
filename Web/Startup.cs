@@ -21,7 +21,8 @@ namespace Web
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer("BaseConnect"));
+            services.AddDbContext<ApplicationContext>(options => 
+                options.UseSqlServer(_configuration.GetConnectionString("DevConnect")));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {

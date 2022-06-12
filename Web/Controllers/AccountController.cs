@@ -37,7 +37,7 @@ public class AccountController : Controller
             {
                     
                 user = new User { Login = model.Login, Password = model.Password };
-                Role userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "user");
+                Role userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Code == "user");
                 if (userRole != null)
                     user.Role = userRole;
 
@@ -88,7 +88,7 @@ public class AccountController : Controller
         var claims = new List<Claim>
         {
             new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-            new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role ? .Name)
+            new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role ? .Code)
 
         };
         ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, 

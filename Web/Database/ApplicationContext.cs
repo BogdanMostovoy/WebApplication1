@@ -22,8 +22,8 @@ public class ApplicationContext : DbContext
         string adminPass = "admin";
 
 
-        Role adminRole = new Role{Id = 1, Name = adminRoleName};
-        Role userRole = new Role{Id = 2, Name = userRoleName};
+        Role adminRole = new Role{Id = 1, Code = adminRoleName};
+        Role userRole = new Role{Id = 2, Code = userRoleName};
         User adminUser = new User {Id = 1, Login = adminLogin, Password = adminPass, RoleId = adminRole.Id};
 
 
