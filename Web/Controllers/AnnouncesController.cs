@@ -39,7 +39,7 @@ public class AnnouncesController : Controller
         announce.Title = ToString();
         announce.Description = ToString();
         var date = DateTime.Now;
-        announce.DateTimeOfCreate = date;
+        announce.DateTimeOfAnnounce = date;
         announce.ImagePath = ToString();
 
         return RedirectToAction(nameof(AnnounceList));

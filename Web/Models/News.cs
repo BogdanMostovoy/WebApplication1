@@ -18,6 +18,9 @@ public class News
 
     public DateTimeOffset DateTimeOfUpdate { get; set; }
 
+    public int AuthorId { get; set; }
+    public User Author { get; set; }
+
     [MaxLength(128)]
     public string ImagePath { get; set; }
 }
