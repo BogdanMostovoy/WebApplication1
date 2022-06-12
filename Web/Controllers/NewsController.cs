@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models;
 using Web.Services;
+using Web.ViewModels.News;
 
 namespace Web.Controllers;
 
-public class NewsController : Controller
+public class NewsController : ChugBiblController
 {
     private readonly INewsService _newsService;
 
@@ -15,35 +19,47 @@ public class NewsController : Controller
         _newsService = newsService;
     }
 
-
     [HttpGet]
-    public async Task<IActionResult> NewsList() => View(await _newsService.LightNews());
+    public async Task<IActionResult> List()
+    {
+        var lightNews = await _newsService.LightNews();
+        if (lightNews.IsFailure)
+        {
+            ModelState.AddModelError(string.Empty, lightNews.ErrorMessage);
+            return View(new List<LightNews>());
+        }
 
+        return View(lightNews.Value);
+    }
 
-
-    public IActionResult DetailedNews(int id)
+    public IActionResult DetailedNews(int newsId)
     {
         var news = new News();
         return View(news);
     }
 
-
     [HttpGet]
-    public IActionResult CreateNews()
+    [Authorize(Roles = RoleCodes.Admin)]
+    public IActionResult Create()
     {
-        var news = new News();
-        return View(news);
+        return View(new CreateNewsForm());
     }
+
+
     [HttpPost] 
-    public IActionResult CreateNews(News news)
+    [Authorize(Roles = RoleCodes.Admin)]
+    public async Task<IActionResult> Create([FromForm]CreateNewsForm createForm)
     {
-        news.Title = ToString();
-        news.Description = ToString();
-        var date = DateTime.Now;
-        news.DateTimeOfCreate = date;
-        news.DateTimeOfUpdate = date;
-        news.ImagePath = ToString();
+        if (!ModelState.IsValid)
+            return View(createForm);
+        
+        var creation = await _newsService.Create(CurrentUserId, createForm);
+        if (creation.IsFailure)
+        {
+            ModelState.AddModelError(string.Empty, creation.ErrorMessage);
+            return View(createForm);
+        }
 
-        return RedirectToAction(nameof(NewsList));
+        return RedirectToAction(nameof(List));
     }
 }

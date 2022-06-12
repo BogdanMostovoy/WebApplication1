@@ -5,7 +5,7 @@ using Web.ViewModels;
 
 namespace Web.Controllers;
 
-public class HomeController : Controller
+public class HomeController : ChugBiblController
 {
     private readonly ILogger<HomeController> _logger;
 

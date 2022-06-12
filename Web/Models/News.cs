@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Web.Models;
@@ -15,12 +16,10 @@ public class News
     public string Description { get; set; }
 
     public DateTimeOffset DateTimeOfCreate { get; set; }
-
     public DateTimeOffset DateTimeOfUpdate { get; set; }
 
     public int AuthorId { get; set; }
     public User Author { get; set; }
 
-    [MaxLength(128)]
-    public string ImagePath { get; set; }
+    public List<NewsImage> Pictures { get; set; }
 }

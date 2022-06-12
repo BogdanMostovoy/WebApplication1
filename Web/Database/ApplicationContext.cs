@@ -9,6 +9,7 @@ public class ApplicationContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<Announce> Announces { get; set; }
     public DbSet<News> News { get; set; }
+    public DbSet<NewsImage> NewsImages { get; set; }
     
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     { }

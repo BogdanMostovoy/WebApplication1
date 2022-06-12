@@ -7,7 +7,7 @@ using Web.Services;
 
 namespace Web.Controllers;
 
-public class AnnouncesController : Controller
+public class AnnouncesController : ChugBiblController
 {
     private readonly IAnnouncesService _announcesService;
 

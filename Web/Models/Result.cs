@@ -6,7 +6,7 @@ public class Result
 {
     public string ErrorMessage { get; private init; } = string.Empty; 
     public bool IsSuccess { get; private init; }
-    public bool IsFailure => IsSuccess;
+    public bool IsFailure => !IsSuccess;
 
     protected Result()
     {

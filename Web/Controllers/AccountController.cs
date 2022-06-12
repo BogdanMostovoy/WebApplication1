@@ -4,97 +4,77 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Web.Database;
 using Web.Models;
+using Web.Services;
 using Web.ViewModels.Auth;
 
 namespace Web.Controllers;
 
-public class AccountController : Controller
+public class AccountController : ChugBiblController
 {
-    private readonly ApplicationContext _context;
+    private readonly IAuthService _authService;
+    private readonly IUsersService _usersService;
 
-    public AccountController(ApplicationContext context)
+    public AccountController(IAuthService authService, IUsersService usersService)
     {
-        _context = context;
+        _authService = authService;
+        _usersService = usersService;
     }
-
+    
     [HttpGet]
-    public IActionResult Register()
-    {
-        return View();
-    }
-
+    public IActionResult Login() => View();
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register(RegisterModel model)
-    {
-        if (ModelState.IsValid)
-        {
-            User user = await _context.Users.FirstOrDefaultAsync(u => u.Login == model.Login);
-            if (user == null)
-            {
-                    
-                user = new User { Login = model.Login, Password = model.Password };
-                Role userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Code == "user");
-                if (userRole != null)
-                    user.Role = userRole;
-
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-
-                await Authentiticate(user); 
-
-                return RedirectToAction("Index", "Home");
-            }
-            else
-                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
-        }
-        return View(model);
-
-    }
-
-    [HttpGet]
-    public IActionResult Login()
-    {
-
-        return View();
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-
     public async Task<IActionResult>Login(LoginModel model)
-
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid) 
+            return View(model);
+
+        var verify = await _authService.VerifyPasswordForLogin(model.Login, model.Password);
+        if (verify.IsFailure)
         {
-            User user = await _context.Users
-                .Include(u => u.Role)
-                .FirstOrDefaultAsync(u => u.Login == model.Login && u.Password == model.Password);
-            if (user != null)
-            {
-                await Authentiticate(user);
-                return RedirectToAction("Index", "Home");
-            }
-            ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+            ModelState.AddModelError(string.Empty, verify.ErrorMessage);
+            return View(model);
         }
-        return View(model);
+
+        if (!verify.Value)
+        {
+            ModelState.AddModelError(string.Empty, "Пароль не верный");
+            return View(model);
+        }
+
+        var user = await _usersService.ByLogin(model.Login);
+        if (user.IsFailure)
+        {
+            ModelState.AddModelError(string.Empty, user.ErrorMessage);
+            return View(model);
+        }
+            
+        
+        await Authenticate(user.Value);
+        return RedirectToAction("Index", "Home");
+    }
+    
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return RedirectToAction("Login", "Account");
     }
 
-    private async Task Authentiticate (User user)
+    private async Task Authenticate(User user)
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-            new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role ? .Code)
-
+            new (ClaimsIdentity.DefaultNameClaimType, user.Login),
+            new (ClaimsIdentity.DefaultRoleClaimType, user.Role.Code),
+            new (ClaimsIdentity.DefaultIssuer, user.Id.ToString())
         };
-        ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, 
+        
+        var id = new ClaimsIdentity(claims, AuthConstants.CookieName, 
+            ClaimsIdentity.DefaultNameClaimType, 
             ClaimsIdentity.DefaultRoleClaimType);
 
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
     }
-        
 }

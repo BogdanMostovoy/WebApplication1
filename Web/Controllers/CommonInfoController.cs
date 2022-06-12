@@ -2,7 +2,7 @@
 
 namespace Web.Controllers;
 
-public class ALLInfoController : Controller
+public class ALLInfoController : ChugBiblController
 {
     public IActionResult Index()
     {

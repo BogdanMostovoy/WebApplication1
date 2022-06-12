@@ -1,5 +1,5 @@
-﻿
-@model ICollection<Web.Models.News>
+﻿@using System.Globalization
+@model List<LightNews>
 
 @{
     ViewData["Title"] = "Наши новости";
@@ -24,8 +24,7 @@
             <span>Пт: с 14:00 до 22:00. </span> 
             <span>Суббота, Воскресенье: с 10:00 до 17:00.</span>
             <span>Обед: с 14:00 до 15:00.</span> 
-            <span>Выходной: Понедельник.</span> 
-        
+            <span>Выходной: Понедельник.</span>
     </div>
 
     <div class="col-6 pe-1">
@@ -40,38 +39,31 @@
             <li><span>Вокруг света</span></li>
             <li><span>Бурда</span></li>
         </ul>
-           
     </div>
 </div>
 
 <div class="row mb-2 text-center">
 
     <div class="col-md-6">
+        @foreach (var news in Model)
+        {
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 
-        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    
+                    <div class="mb-1 text-muted">@news.PostDate.ToString("yyyy MMMM dd", new CultureInfo("ru-Ru"))</div>
 
-            <div class="col p-4 d-flex flex-column position-static">
-
-                <h3 class="mb-0">Спортивные эстафеты по сказкам А. С Пушкина с. Верхняя Бреевка</h3>
-
-                <div class="mb-1 text-muted">Nov 12</div>
-
-                <p class="card-text mb-auto">
-                    В замечательный праздник - Пушкинский день России заведующий библиотекой-филиалом Романишин Инна Игоревна из с. 
-                    Верхняя Бреевка для ребят из летнего лагеря МКОУ СОШ №11 провела спортивные эстафеты по сказкам А. С Пушкина.
-                </p>
-
-                <a href="#" class="stretched-link">Подробнее...</a>
-
+                    <p class="card-text mb-auto">@news.Title</p>
+                    <div>
+                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(news.MainImage))"
+                             alt="Image"
+                             height="60"
+                             width="60"
+                             class="mb-2 rounded-circle img-thumbnail">
+                    </div>
+                    <a href="#" class="stretched-link">Подробнее...</a>
+                </div>
             </div>
-
-            <div class="col-auto d-none d-lg-block">
-
-                < class="bd-placeholder-img" width="200" height="250" src="/img/news-img/1.jpg" role="img"  preserveAspectRatio="xMidYMid slice" focusable="false"></>
-
-            </div>
-
-        </div>
+        }
     </div>
-
 </div>

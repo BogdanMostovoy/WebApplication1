@@ -7,6 +7,7 @@ namespace Web.Services;
 
 public interface INewsService
 {
-    public Task<List<LightNews>> LightNews();
-    public Task<Result<DetailedNews>> DetailedNews(int announceId);
+    Task<Result<List<LightNews>>> LightNews();
+    Task<Result<DetailedNews>> DetailedNews(int announceId);
+    Task<Result<int>> Create(int actorId, CreateNewsForm form);
 }

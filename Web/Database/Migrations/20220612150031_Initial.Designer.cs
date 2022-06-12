@@ -12,7 +12,7 @@ using Web.Database;
 namespace Web.Database.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220612104012_Initial")]
+    [Migration("20220612150031_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,10 +78,6 @@ namespace Web.Database.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
-                    b.Property<string>("ImagePath")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
                     b.Property<string>("Title")
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
@@ -91,6 +87,28 @@ namespace Web.Database.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("News");
+                });
+
+            modelBuilder.Entity("Web.Models.NewsImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<int>("NewsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NewsId");
+
+                    b.ToTable("NewsImages");
                 });
 
             modelBuilder.Entity("Web.Models.Role", b =>
@@ -119,10 +137,12 @@ namespace Web.Database.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Login")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("PasswordHash")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -156,6 +176,15 @@ namespace Web.Database.Migrations
                     b.Navigation("Author");
                 });
 
+            modelBuilder.Entity("Web.Models.NewsImage", b =>
+                {
+                    b.HasOne("Web.Models.News", null)
+                        .WithMany("Pictures")
+                        .HasForeignKey("NewsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Web.Models.User", b =>
                 {
                     b.HasOne("Web.Models.Role", "Role")
@@ -165,6 +194,11 @@ namespace Web.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Web.Models.News", b =>
+                {
+                    b.Navigation("Pictures");
                 });
 #pragma warning restore 612, 618
         }

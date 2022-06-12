@@ -13,8 +13,7 @@ public class Program
         var host = CreateHostBuilder(args).Build();
 
         await using var scope = host.Services.CreateAsyncScope();
-        var db = scope.ServiceProvider.GetService<ApplicationContext>();
-        await DataInitializer.InitializeAsync(db);
+        await DataInitializer.InitializeAsync(scope.ServiceProvider);
         
         await host.RunAsync();
     }

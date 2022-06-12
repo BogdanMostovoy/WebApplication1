@@ -24,6 +24,7 @@ namespace Web
         {
             services.AddDbContext<ApplicationContext>(options => 
                 options.UseSqlServer(_configuration.GetConnectionString("DevConnect")));
+            
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
@@ -32,9 +33,12 @@ namespace Web
                 });
             
             services.AddControllersWithViews();
-            services.AddScoped<INewsService, NewsService>();
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IAnnouncesService, AnnouncesService>();
+            services.AddScoped<IHasher, Rfc2898Hasher>()
+                    .AddScoped<INewsService, NewsService>()
+                    .AddScoped<IAuthService, AuthService>()
+                    .AddScoped<IUsersService, UsersService>()
+                    .AddScoped<IAnnouncesService, AnnouncesService>()
+                    .AddScoped<IImageService, ImageService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

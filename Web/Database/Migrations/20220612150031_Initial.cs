@@ -28,8 +28,8 @@ namespace Web.Database.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Login = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Login = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    PasswordHash = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
                     RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -76,8 +76,7 @@ namespace Web.Database.Migrations
                     Description = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: true),
                     DateTimeOfCreate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     DateTimeOfUpdate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    AuthorId = table.Column<int>(type: "int", nullable: false),
-                    ImagePath = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true)
+                    AuthorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,6 +85,26 @@ namespace Web.Database.Migrations
                         name: "FK_News_Users_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NewsImages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    NewsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NewsImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NewsImages_News_NewsId",
+                        column: x => x.NewsId,
+                        principalTable: "News",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -101,6 +120,11 @@ namespace Web.Database.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_NewsImages_NewsId",
+                table: "NewsImages",
+                column: "NewsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
                 table: "Users",
                 column: "RoleId");
@@ -110,6 +134,9 @@ namespace Web.Database.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Announces");
+
+            migrationBuilder.DropTable(
+                name: "NewsImages");
 
             migrationBuilder.DropTable(
                 name: "News");
