@@ -1,2 +1,18 @@
+@using System.Globalization
 @model DetailedAnnounce
 
+<div class="row">
+    <div class="col-sn-6">
+        <div>@Model.AnnounceDate.ToString("yyyy MMMM dd", new CultureInfo("ru-Ru"))</div><br/>
+        <div>
+             <img src="data:image/jpeg;base64,@(Convert.ToBase64String(@Model.Image))"
+                  alt="Image"
+                  height="60"
+                  width="60"
+                  class="mb-2 rounded-circle img-thumbnail">
+        </div>
+        <div>@Model.Title</div> <br/>
+        <div>@Model.Description</div><br/>
+    </div>
+</div>
+    

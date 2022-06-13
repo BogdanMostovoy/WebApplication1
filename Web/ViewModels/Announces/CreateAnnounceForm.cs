@@ -20,4 +20,9 @@ public class CreateAnnounceForm
     
     [Required]
     public IFormFile Image { get; set; }
+
+    public CreateAnnounceForm()
+    {
+        AnnounceDate = DateTimeOffset.Now;
+    }
 }

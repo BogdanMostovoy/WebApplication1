@@ -16,8 +16,12 @@ public class EditNewsForm
     [MaxLength(2048, ErrorMessage = "Длинна не больше 2048-ми символов")]
     public string Description { get; set; }
     
-    [Required]
-    [MaxLength(10, ErrorMessage = "Максимум 10 изображений")]
-    [MinLength(1, ErrorMessage = "Минимум одно изображение")]
     public List<IFormFile> Images { get; set; }
+
+    public List<byte[]> CurrentImages { get; set; }
+
+    public EditNewsForm()
+    {
+        Images = new List<IFormFile>();
+    }
 }

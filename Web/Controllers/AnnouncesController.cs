@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Web.Models;
 using Web.Services;
 using Web.ViewModels.Announces;
 
@@ -36,6 +33,9 @@ public class AnnouncesController : ChugBiblController
     [HttpPost]
     public async Task<IActionResult> Create(CreateAnnounceForm form)
     {
+        if (!ModelState.IsValid)
+            return View(form);
+        
         var announceId = await _announcesService.Create(CurrentUserId.Value, form);
         return RedirectToAction("List");
     }

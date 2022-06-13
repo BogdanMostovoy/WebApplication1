@@ -122,12 +122,15 @@ public class NewsService : INewsService
         news.Title = form.Title;
         news.Description = form.Description;
         _db.NewsImages.RemoveRange(news.Pictures);
-        var imageNames = new List<string>();
-        foreach (var image in form.Images)
-            imageNames.Add(await _imageService.SaveFile(image));
+        if (form.Images.Any())
+        {
+            var imageNames = new List<string>();
+            foreach (var image in form.Images)
+                imageNames.Add(await _imageService.SaveFile(image));
         
-        _db.NewsImages.AddRange(imageNames.Select(u => new NewsImage
-        { Name = u, NewsId = news.Id }));
+            _db.NewsImages.AddRange(imageNames.Select(u => new NewsImage
+                { Name = u, NewsId = news.Id }));
+        }
 
         await _db.SaveChangesAsync();
 

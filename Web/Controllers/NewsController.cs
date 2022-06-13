@@ -84,7 +84,8 @@ public class NewsController : ChugBiblController
             NewsId = news.Value.Id,
             Title = news.Value.Title,
             Description = news.Value.Description,
-            Images = files
+            Images = files,
+            CurrentImages = news.Value.Images.Values.ToList()
         });
     }
     

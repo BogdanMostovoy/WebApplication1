@@ -1,14 +1,18 @@
 @using System.Globalization
+@using Web
 @model DetailedNews
 
-<button class="btn btn-info">
-    <a asp-action="Edit" asp-controller="News" asp-route-newsId="@Model.Id" >Редактировать</a>
-</button>
-<br/>
-<form asp-action="Delete" asp-controller="News" asp-route-newsId="@Model.Id" method="post">
-    <button type="submit" class="btn btn-danger">Удалить</button>
+@if (User.IsAdmin())
+{
+    <button class="btn btn-info">
+        <a asp-action="Edit" asp-controller="News" asp-route-newsId="@Model.Id" >Редактировать</a>
+    </button>
     <br/>
-</form>
+    <form asp-action="Delete" asp-controller="News" asp-route-newsId="@Model.Id" method="post">
+        <button type="submit" class="btn btn-danger">Удалить</button>
+        <br/>
+    </form>
+}
 <div>@Model.Author.Login</div>
 <div>@Model.PostDate.ToString("yyyy MMMM dd", new CultureInfo("ru-Ru"))</div> <br/>
 <div>

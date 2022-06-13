@@ -83,6 +83,7 @@ public class AnnouncesService : IAnnouncesService
             return new($"Аннонс {announceId} не найден");
 
         _db.Announces.Remove(announce);
+        await _db.SaveChangesAsync();
         return true;
     }
 }

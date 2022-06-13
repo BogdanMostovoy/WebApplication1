@@ -2,8 +2,8 @@
 
 <div class="row">
     <div class="col-sn-6">
-        <form method="post" enctype="multipart/form-data" asp-action="Edit">
-            <input asp-for="NewsId" value="@Model.NewsId"/>
+        <form method="post"  enctype="multipart/form-data" asp-action="Edit">
+            <input type="hidden" asp-for="NewsId" value="@Model.NewsId"/>
             <div class="form-group">
                 <label asp-for="Title" class="control-label">Заголовок</label>
                 <input asp-for="Title" class="form-control"/>
@@ -15,7 +15,8 @@
                 <textarea asp-for="Description"  class="form-control"></textarea>
                 <span asp-validation-for="Description"></span>
             </div>
-
+            
+            <div class="alert alert-warning">Если заменить хотя бы одну картинку, старые удаляться</div>
             <div class="form-group">
                 <label asp-for="Images" class="control-label">Загрузить картинку</label>
                 <input asp-for="Images" class="form-control" type="file"/>
@@ -36,6 +37,19 @@
                 <input asp-for="Images" class="form-control" type="file"/>
                 <span asp-validation-for="Images"></span>
             </div>
+            
+            @if (Model.Images.Any())
+            {
+                <div>Текущие фото:</div>
+            }
+            @foreach (var image in Model.CurrentImages)
+            {
+                <img src="data:image/jpeg;base64,@(Convert.ToBase64String(image))"
+                     alt="Image"
+                     height="60"
+                     width="60"
+                     class="mb-2 rounded-circle img-thumbnail">
+            }
 
             <input class="btn btn-primary" type="submit" value="Save"/>
         </form>
