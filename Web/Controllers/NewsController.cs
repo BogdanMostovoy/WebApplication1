@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -52,7 +54,7 @@ public class NewsController : ChugBiblController
 
     [HttpPost] 
     [Authorize(Roles = RoleCodes.Admin)]
-    public async Task<IActionResult> Create([FromForm]CreateNewsForm createForm)
+    public async Task<IActionResult> Create([FromForm] CreateNewsForm createForm)
     {
         if (!ModelState.IsValid)
             return View(createForm);
@@ -65,6 +67,38 @@ public class NewsController : ChugBiblController
         }
 
         return RedirectToAction(nameof(List));
+    }
+
+    [HttpGet]
+    [Authorize(Roles = RoleCodes.Admin)]
+    public async Task<IActionResult> Edit(int newsId)
+    {
+        var news = await _newsService.DetailedNews(newsId);
+        var files = news.Value.Images
+            .Select(u => 
+                (IFormFile)new FormFile(new MemoryStream(u.Value), 0, u.Value.Length, u.Key, u.Key))
+            .ToList();
+
+        return View(new EditNewsForm
+        {
+            NewsId = news.Value.Id,
+            Title = news.Value.Title,
+            Description = news.Value.Description,
+            Images = files
+        });
+    }
+    
+    [HttpPost]
+    [Authorize(Roles = RoleCodes.Admin)]
+    public async Task<IActionResult> Edit([FromForm] EditNewsForm form)
+    {
+        var edit = await _newsService.Edit(CurrentUserId.Value, form);
+        if (edit.IsFailure)
+        {
+            ModelState.AddModelError(string.Empty, edit.ErrorMessage);
+            return View(form);
+        }
+        return RedirectToAction("Detailed", new { newsId = form.NewsId });
     }
 
     [HttpPost]

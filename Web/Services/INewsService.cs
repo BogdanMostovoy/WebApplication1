@@ -10,5 +10,6 @@ public interface INewsService
     Task<Result<List<LightNews>>> LightNews();
     Task<Result<DetailedNews>> DetailedNews(int newsId);
     Task<Result<int>> Create(int actorId, CreateNewsForm form);
+    Task<Result<bool>> Edit(int actorId, EditNewsForm form);
     Task<Result<bool>> Delete(int newsId);
 }

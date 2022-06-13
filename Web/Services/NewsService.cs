@@ -48,6 +48,7 @@ public class NewsService : INewsService
     public async Task<Result<DetailedNews>> DetailedNews(int newsId)
     {
         var news = await _db.News.AsNoTracking()
+            .Include(u => u.Author)
             .Include(u => u.Pictures)
             .FirstOrDefaultAsync(u => u.Id == newsId);
         
@@ -64,6 +65,7 @@ public class NewsService : INewsService
             Title = news.Title,
             Description = news.Description,
             PostDate = news.DateTimeOfCreate,
+            Author = news.Author,
             Images = images.Value
         };
     }
@@ -104,6 +106,32 @@ public class NewsService : INewsService
         await _db.SaveChangesAsync();
 
         return news.Id;
+    }
+
+    public async Task<Result<bool>> Edit(int actorId, EditNewsForm form)
+    {
+        if (!await _usersService.ExistsBy(actorId))
+            return new($"Пользователь {actorId} не найден");
+        
+        var news = await _db.News.Include(u => u.Pictures)
+            .FirstOrDefaultAsync(u => u.Id == form.NewsId);
+        if (news == null)
+            return new($"Новость {form.NewsId} не найдена");
+
+        news.AuthorId = actorId;
+        news.Title = form.Title;
+        news.Description = form.Description;
+        _db.NewsImages.RemoveRange(news.Pictures);
+        var imageNames = new List<string>();
+        foreach (var image in form.Images)
+            imageNames.Add(await _imageService.SaveFile(image));
+        
+        _db.NewsImages.AddRange(imageNames.Select(u => new NewsImage
+        { Name = u, NewsId = news.Id }));
+
+        await _db.SaveChangesAsync();
+
+        return true;
     }
 
     public async Task<Result<bool>> Delete(int newsId)

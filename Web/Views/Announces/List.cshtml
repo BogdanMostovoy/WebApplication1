@@ -1,0 +1,29 @@
+﻿@using System.Globalization
+@model List<LightAnnounce>
+
+
+<div class="row mb-2 text-center">
+
+    <div class="col-md-6">
+        @foreach (var announce in Model)
+        {
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+
+                <div class="col p-4 d-flex flex-column position-static">
+                    
+                    <div class="mb-1 text-muted">@announce.AnnounceDate.ToString("yyyy MMMM dd", new CultureInfo("ru-Ru"))</div>
+
+                    <p class="card-text mb-auto">@announce.Title</p>
+                    <div>
+                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(announce.Image))"
+                             alt="Image"
+                             height="60"
+                             width="60"
+                             class="mb-2 rounded-circle img-thumbnail">
+                    </div>
+                    <a asp-controller="Announces" asp-action="Detailed" asp-route-newsId ="@announce.Id" class="stretched-link">Подробнее...</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

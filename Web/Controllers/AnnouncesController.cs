@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models;
 using Web.Services;
+using Web.ViewModels.Announces;
 
 namespace Web.Controllers;
 
@@ -16,32 +17,33 @@ public class AnnouncesController : ChugBiblController
         _announcesService = announcesService;
     }
 
-    public async Task<IActionResult> AnnounceList() => 
+    public async Task<IActionResult> List() => 
         View(await _announcesService.LightAnnounces());
     
-    public IActionResult Create()
+
+
+    [HttpGet]
+    public async Task<IActionResult> Detailed(int announceId)
     {
-        var preview = new Announce();
-        return View(preview);
+        var announce = await _announcesService.DetailedAnnounce(announceId);
+        return View(announce.Value);
     }
 
-    public IActionResult FullPreview(int id)
+    [HttpGet]
+    public IActionResult Create() => View(new CreateAnnounceForm());
+    
+    
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateAnnounceForm form)
     {
-        var preview = new Announce();
-        return View(preview);
+        var announceId = await _announcesService.Create(CurrentUserId.Value, form);
+        return RedirectToAction("List");
     }
-
 
     [HttpPost]
-    public IActionResult Create(Announce announce)
+    public async Task<IActionResult> Delete(int announceId)
     {
-        announce.Id = GetHashCode();
-        announce.Title = ToString();
-        announce.Description = ToString();
-        var date = DateTime.Now;
-        announce.DateTimeOfAnnounce = date;
-        announce.ImagePath = ToString();
-
-        return RedirectToAction(nameof(AnnounceList));
+        var delete = await _announcesService.Delete(announceId);
+        return RedirectToAction("List");
     }
 }

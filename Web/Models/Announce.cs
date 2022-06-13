@@ -19,6 +19,9 @@ public class Announce
     public int AuthorId { get; set; }
     public User Author { get; set; }
     
+    /// <summary>
+    /// in fact image name
+    /// </summary>
     [MaxLength(128)]
     public string ImagePath { get; set; }
 }

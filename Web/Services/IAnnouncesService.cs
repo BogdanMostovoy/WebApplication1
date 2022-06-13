@@ -9,4 +9,6 @@ public interface IAnnouncesService
 {
     public Task<List<LightAnnounce>> LightAnnounces();
     public Task<Result<DetailedAnnounce>> DetailedAnnounce(int announceId);
+    public Task<Result<int>> Create(int actorId, CreateAnnounceForm form);
+    public Task<Result<bool>> Delete(int announceId);
 }

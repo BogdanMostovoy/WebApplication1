@@ -55,7 +55,7 @@ public class ImageService : IImageService
         return image;
     }
 
-    public async Task<Result<List<byte[]>>> ReadImages(List<int> imageIds)
+    public async Task<Result<Dictionary<string, byte[]>>> ReadImages(List<int> imageIds)
     {
         var imageNames = await _db.NewsImages
             .Where(u => imageIds.Contains(u.Id))
@@ -63,14 +63,14 @@ public class ImageService : IImageService
             .Select(u => u.Name)
             .ToListAsync();
         
-        var images = new List<byte[]>();
+        var images = new Dictionary<string, byte[]>();
         
         foreach (var name in imageNames)
         {
             var path = Path.Combine(_pathToImages, name);
             try
             {
-                images.Add(await File.ReadAllBytesAsync(path));
+                images.Add(name, await File.ReadAllBytesAsync(path));
             }
             catch (Exception)
             {
@@ -83,6 +83,22 @@ public class ImageService : IImageService
             return new($"Не удалось найти все фото({string.Join(",", imageIds.Select(u => u.ToString()))})");
         
         return images;
+    }
+
+    public async Task<Result<byte[]>> ReadImage(string imageName)
+    {
+        var path = Path.Combine(_pathToImages, imageName);
+        byte[] image;
+        try
+        {
+            image = await File.ReadAllBytesAsync(path);
+        }
+        catch (Exception)
+        {
+            return new($"Нельзя прочитать файл {imageName}");
+        }
+
+        return image;
     }
 
     public async Task<string> SaveFile(IFormFile file)

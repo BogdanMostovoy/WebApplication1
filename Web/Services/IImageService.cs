@@ -7,8 +7,9 @@ namespace Web.Services;
 
 public interface IImageService
 {
-    public Task<Result<byte[]>> ReadFirstNewsImage(int newsId);
-    public Task<Result<List<byte[]>>> ReadImages(List<int> imageIds);
+    Task<Result<byte[]>> ReadFirstNewsImage(int newsId);
+    Task<Result<Dictionary<string, byte[]>>> ReadImages(List<int> imageIds);
+    Task<Result<byte[]>> ReadImage(string imageName);
     Task<string> SaveFile(IFormFile file);
     byte[] GetBytesFrom(IFormFile image);
     bool IsImage(IFormFile image);
